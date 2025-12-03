@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Shopping Cart API
+  description: API for managing a shopping cart
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+paths:
+  /createCart:
+    post:
+      summary: Create a shopping cart
+      description: Creates a new shopping cart
+      responses:
+        '200':
+          description: Cart created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Success call
+  /getCart:
+    get:
+      summary: Get cart contents
+      description: Fetches all products in the shopping cart
+      responses:
+        '200':
+          description: List of products in the cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Smartphone
+                    price:
+                      type: number
+                      format: double
+                      example: 699.99
+                    inStock:
+                      type: boolean
+                      example: true
+                    image:
+                      type: string
+                      example: base64-encoded-image-data
