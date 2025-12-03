@@ -1,0 +1,97 @@
+-- Users Table
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL UNIQUE,
+    user_password VARCHAR(255) NOT NULL,
+    user_addr VARCHAR(255),
+    user_contact VARCHAR(15),
+    payment_mode VARCHAR(10)
+);
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+
+-- Products Table
+CREATE TABLE products (
+    PRODUCT_ID INT PRIMARY KEY AUTO_INCREMENT,
+    PRODUCT_NAME VARCHAR(255) NOT NULL,
+    PRODUCT_PRICE DECIMAL(10, 2) NOT NULL,
+    PRODUCT_AVLBLTY BOOLEAN NOT NULL,
+    PRODUCT_DATA_URL VARCHAR(255) NOT NULL
+);
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('BABY CORN', 35, TRUE, 'https://www.greendna.in/cdn/shop/products/babycorn_600x.jpg?v=1601816412');
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('AVACADO', 157, FALSE, 'https://images.healthshots.com/healthshots/en/uploads/2024/04/04153309/avocado-1.jpg');
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('CHERRY TOMATOES', 50, TRUE, 'https://gourmetgarden.in/cdn/shop/products/Untitleddesign_2_2092bf7b-1ee5-4eae-a8ee-68ea4071d27e.png?v=1743916187');
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('LETTUCE', 70, TRUE, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5kdAGprmUPAQ8hXoc0-MhCj-tmFhVf4kBzfYp1f0xNJ9X9w5kslWSl44eRCWYp-Qtzc&usqp=CAU');
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('BROCCOLI', 120, TRUE, 'https://storables.com/wp-content/uploads/2023/10/how-to-store-broccoli-in-the-refrigerator-1696700248.jpeg');
+
+INSERT INTO PRODUCTS (product_name, product_price, PRODUCT_AVLBLTY, PRODUCT_DATA_URL)
+VALUES ('BELL PEPPERS', 99, FALSE, 'https://aanmc.org/wp-content/uploads/2023/09/bell-peppers-1200x800-1-1024x683.jpg');
+
+----------------------------------------------------------------------------------------------------------
+
+-- Orders Table
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    order_status VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+----------------------------------------------------------------------------------------------------------
+
+-- Order Items Table
+CREATE TABLE ordered_items (
+    order_item_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+
+----------------------------------------------------------------------------------------------------------
+
+-- Payments Table
+CREATE TABLE payments (
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    payment_amount DECIMAL(10, 2) NOT NULL,
+    payment_status VARCHAR(50),
+    payment_mode VARCHAR(50),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+----------------------------------------------------------------------------------------------------------
+
+
+
+
+
+		select * from products;
+
+		select * from users;
+
+		select * from orders;
+
+		select * from ordered_items;
+
+		select * from payments;

@@ -1,0 +1,126 @@
+Tables
+	1. user table
+		- userName, address, mobile, payment_mode
+		- userID -> primary key -> unique
+		
+	2. orders
+		-  orderId - unique primary key
+		- userId, -- foreign key
+		- shoppingContentId, -- foreign key
+		- orderStatus, 
+		- isReturned
+		
+==============================================================================================================
+
+
+
+drop table products;
+
+CREATE TABLE products (
+    PRODUCT_ID INT PRIMARY KEY AUTO_INCREMENT,
+    PRODUCT_NAME VARCHAR(255) NOT NULL,
+    PRODUCT_PRICE DECIMAL(10, 2) NOT NULL,
+    PRODUCT_AVLBLTY BOOLEAN NOT NULL,
+    PRODUCT_DATA_URL VARCHAR(255) NOT NULL
+);
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BABY CORN', 35, TRUE, 'https://www.greendna.in/cdn/shop/products/babycorn_600x.jpg?v=1601816412');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('AVACADO', 157, FALSE, 'https://images.healthshots.com/healthshots/en/uploads/2024/04/04153309/avocado-1.jpg');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('CHERRY TOMATOES', 50, TRUE, 'https://gourmetgarden.in/cdn/shop/products/Untitleddesign_2_2092bf7b-1ee5-4eae-a8ee-68ea4071d27e.png?v=1743916187');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('LETTUCE', 70, TRUE, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5kdAGprmUPAQ8hXoc0-MhCj-tmFhVf4kBzfYp1f0xNJ9X9w5kslWSl44eRCWYp-Qtzc&usqp=CAU');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BROCCOLI', 120, TRUE, 'https://storables.com/wp-content/uploads/2023/10/how-to-store-broccoli-in-the-refrigerator-1696700248.jpeg');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BELL PEPPERS', 99, FALSE, 'https://aanmc.org/wp-content/uploads/2023/09/bell-peppers-1200x800-1-1024x683.jpg');
+
+
+select * from products;
+
+insert into products (ITEM_AVLBLTY, ITEM_PRICE, PRODUCT_PRICE, PRODUCT_STOCK, PRODUCT_ID, IMAGE_DATA, ITEM_NAME, PRODUCT_DESCRIPTION, PRODUCT_IMAGE_URL PRODUCT_NAME ) values	('
+
+----------------------------------------------------------------------------------------------------------
+
+drop table users;
+	
+CREATE TABLE users (
+    USER_ID INT PRIMARY KEY AUTO_INCREMENT,
+    USER_NAME VARCHAR(255) NOT NULL,
+	USER_EMAIL VARCHAR(255) NOT NULL,
+	USER_PASSWORD VARCHAR(255) NOT NULL,
+    USER_ADDR VARCHAR(255),
+    USER_CONTACT VARCHAR(15),
+    PAYMENT_MODE VARCHAR(10) UNIQUE
+);
+
+insert into users (USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD, USER_ADDR, USER_CONTACT, PAYMENT_MODE) 
+values (1101, 'Aakash', 'asd@gmail.com', 'asdasdasdasdf', 'Pune', 123456789, 'UPI');
+
+select * from users;
+
+----------------------------------------------------------------------------------------------------------
+drop table orders;
+
+CREATE TABLE orders (
+    ORDER_ID INT AUTO_INCREMENT PRIMARY KEY, 
+    USER_ID CHAR(10), 
+    SHP_ITEM_ID INT,
+    ORDER_STATUS VARCHAR(50) NOT NULL, 
+    IS_DELIVERED BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_user FOREIGN KEY (USER_ID) REFERENCES users(USER_ID),
+    CONSTRAINT fk_shopping_content FOREIGN KEY (SHP_ITEM_ID) REFERENCES PRODUCTS(PRODUCT_ID)
+);
+
+INSERT INTO ORDERS
+VALUES(2001, 1101, 3, 'Shipped', FALSE);
+
+select * from orders;
+
+----------------------------------------------------------------------------------------------------------
+drop table user_ordered_products;
+
+create table user_ordered_products (
+	USER_ID INT,
+	PRODUCT_ID INT,
+	QUANTITY VARCHAR(10),
+	AMOUNT DECIMAL(10, 2),
+	AMOUNT_STATUS VARCHAR(10),
+	PAYMENT_MODE VARCHAR(10),
+	PRODUCT_STATUS VARCHAR(10),
+	CONSTRAINT fk_user_id FOREIGN KEY (USER_ID) REFERENCES ORDERS(ORDER_ID),
+	CONSTRAINT fk_prdouct_id FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCTS(PRODUCT_ID),
+	CONSTRAINT fk_payment FOREIGN KEY (PAYMENT_MODE) REFERENCES USERS(PAYMENT_MODE)
+);
+
+select * from user_ordered_products;
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+SELECT * FROM PRODUCTS;
+
+select * from users;
+
+select * from orders;
+
+select * from user_ordered_products;
+
+
+
+user -> orer Id created - user selected items
+
+userId - orderId - status
+
+
+order - orderid - item details
