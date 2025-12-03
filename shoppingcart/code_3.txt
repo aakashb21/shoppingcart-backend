@@ -1,0 +1,178 @@
+
+
+drop table products;
+
+CREATE TABLE products (
+    PRODUCT_ID INT PRIMARY KEY AUTO_INCREMENT,
+    ITEM_NAME VARCHAR(255) NOT NULL,
+    ITEM_PRICE DECIMAL(10, 2) NOT NULL,
+    ITEM_AVLBLTY BOOLEAN NOT NULL,
+    IMAGE_DATA VARCHAR(255) NOT NULL
+);
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BABY CORN', 35, TRUE, 'https://www.greendna.in/cdn/shop/products/babycorn_600x.jpg?v=1601816412');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('AVACADO', 157, FALSE, 'https://images.healthshots.com/healthshots/en/uploads/2024/04/04153309/avocado-1.jpg');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('CHERRY TOMATOES', 50, TRUE, 'https://gourmetgarden.in/cdn/shop/products/Untitleddesign_2_2092bf7b-1ee5-4eae-a8ee-68ea4071d27e.png?v=1743916187');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('LETTUCE', 70, TRUE, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA5kdAGprmUPAQ8hXoc0-MhCj-tmFhVf4kBzfYp1f0xNJ9X9w5kslWSl44eRCWYp-Qtzc&usqp=CAU');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BROCCOLI', 120, TRUE, 'https://storables.com/wp-content/uploads/2023/10/how-to-store-broccoli-in-the-refrigerator-1696700248.jpeg');
+
+INSERT INTO PRODUCTS (ITEM_NAME, ITEM_PRICE, ITEM_AVLBLTY, IMAGE_DATA)
+VALUES ('BELL PEPPERS', 99, FALSE, 'https://aanmc.org/wp-content/uploads/2023/09/bell-peppers-1200x800-1-1024x683.jpg');
+
+
+select * from products;
+
+
+
+
+1day - 2hrs
+x days - 714hrs
+
+
+
+
+
+Certainly! The `CorsConfig` class is a configuration class in Spring Boot that enables **Cross-Origin Resource Sharing (CORS)** for your application. Here's a detailed explanation of each part of the class:
+
+---
+
+### **What is CORS?**
+CORS (Cross-Origin Resource Sharing) is a security feature implemented by browsers to restrict how resources on a web page can be requested from another domain (or origin). For example:
+- Your React app runs on `http://localhost:5173`.
+- Your Spring Boot backend runs on `http://localhost:8081`.
+- By default, browsers block requests from `http://localhost:5173` to `http://localhost:8081` unless the backend explicitly allows it.
+
+The `CorsConfig` class is used to configure your Spring Boot backend to allow such cross-origin requests.
+
+---
+
+### **Code Explanation**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+@Configuration
+public class CorsConfig {
+```
+
+- **`@Configuration`**: Marks this class as a Spring configuration class. Spring will automatically detect it and apply the configurations defined inside.
+- This class defines a `CorsFilter` bean to handle CORS requests.
+
+---
+
+#### **1. Define the CORS Configuration**
+```java
+CorsConfiguration config = new CorsConfiguration();
+config.addAllowedOrigin("http://localhost:5173"); // Allow requests from React app
+config.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+config.addAllowedHeader("*"); // Allow all headers
+config.setAllowCredentials(true); // Allow cookies and credentials
+```
+
+- **`addAllowedOrigin("http://localhost:5173")`**:
+  - Specifies the origin (domain) that is allowed to make requests to your backend.
+  - Replace `http://localhost:5173` with the actual URL of your frontend application in production (e.g., `https://myfrontend.com`).
+  - You can also use `config.addAllowedOriginPattern("*")` to allow all origins, but this is not recommended for security reasons.
+
+- **`addAllowedMethod("*")`**:
+  - Allows all HTTP methods (e.g., `GET`, `POST`, `PUT`, `DELETE`).
+  - You can restrict this to specific methods if needed, e.g., `config.addAllowedMethod("GET");`.
+
+- **`addAllowedHeader("*")`**:
+  - Allows all HTTP headers in the request.
+  - You can restrict this to specific headers if needed, e.g., `config.addAllowedHeader("Content-Type");`.
+
+- **`setAllowCredentials(true)`**:
+  - Allows cookies and credentials (e.g., session cookies, authorization headers) to be sent with the request.
+  - This is required if your frontend needs to send authentication tokens or cookies.
+
+---
+
+#### **2. Register the CORS Configuration**
+```java
+UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+source.registerCorsConfiguration("/**", config); // Apply CORS settings to all endpoints
+```
+
+- **`UrlBasedCorsConfigurationSource`**:
+  - Maps the CORS configuration to specific URL patterns.
+  - `"/**"` means the configuration applies to all endpoints in your application.
+
+---
+
+#### **3. Create the CORS Filter**
+```java
+return new CorsFilter(source);
+```
+
+- **`CorsFilter`**:
+  - A Spring filter that intercepts incoming HTTP requests and applies the CORS configuration.
+  - This ensures that the browser receives the appropriate CORS headers in the response.
+
+---
+
+### **How It Works**
+1. When a browser sends a cross-origin request (e.g., from `http://localhost:5173` to `http://localhost:8081`), it first sends a **preflight request** (an `OPTIONS` request) to check if the server allows the request.
+2. The `CorsFilter` intercepts this request and responds with the appropriate CORS headers (e.g., `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`).
+3. If the preflight request is successful, the browser proceeds with the actual request (e.g., `GET` or `POST`).
+
+---
+
+### **Advantages of Using `CorsConfig`**
+- **Centralized Configuration**: You can manage all CORS settings in one place.
+- **Granular Control**: You can allow specific origins, methods, and headers.
+- **Security**: By explicitly specifying allowed origins, you prevent unauthorized cross-origin requests.
+
+---
+
+### **Example Response Headers**
+When the `CorsConfig` is applied, the server will include the following headers in its response to a cross-origin request:
+
+```http
+Access-Control-Allow-Origin: http://localhost:5173
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization
+Access-Control-Allow-Credentials: true
+```
+
+These headers tell the browser that the request is allowed.
+
+---
+
+### **When to Use `@CrossOrigin` Instead**
+If you only need to enable CORS for specific endpoints, you can use the `@CrossOrigin` annotation directly on your controller methods or class. For example:
+
+```java
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+public class CartController {
+    @GetMapping("/getCart")
+    public List<CartItem> getCart() {
+        return List.of(
+            new CartItem(1, "BABY CORN", 35.99, true),
+            new CartItem(2, "AVACADO", 157.0, false)
+        );
+    }
+}
+```
+
+This approach is simpler for small applications but less flexible than the global configuration.
+
+---
+
+Let me know if you need further clarification!
+
+Similar code found with 2 license types
